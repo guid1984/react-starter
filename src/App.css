@@ -31,3 +31,7 @@ img.pokemon-image {
 margin-top:20px;
 margin-bottom: 20px;
 }
+
+input.my-button{
+  margin-right:10px;
+}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Component } from 'react';
 import User from '../interfaces/User.interface';
-import { throws } from 'assert';
+import { Button } from '@material-ui/core';
 
 interface SearchState{
     error: boolean,
@@ -65,25 +65,29 @@ export class PokemonSearch extends Component<User, SearchState> {
 
         const inputValue  = this.pokemonRef.current.value;
         
-        fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}`)
-        .then(res => {
-            if(res.status !== 200){
-                this.setState({error:true});
-                return;
-            }
-            res.json().then(data =>{
-                this.setState({
-                    error:false,
-                    pokemon:{
-                    name:data.name,
-                    numberofAbilities:data.abilities.length,
-                    baseExperience: data.base_experience,
-                    imageUrl:data.sprites.front_default
-                    }
+        if(inputValue){
+            fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}`)
+            .then(res => {
+                if(res.status !== 200){
+                    this.setState({error:true});
+                    return;
+                }
+                res.json().then(data =>{
+                    this.setState({
+                        error:false,
+                        pokemon:{
+                        name:data.name,
+                        numberofAbilities:data.abilities.length,
+                        baseExperience: data.base_experience,
+                        imageUrl:data.sprites.front_default
+                        }
+                    })
                 })
-            })
-            }
-        )
+                }
+            )
+        }else{
+            this.setState({error : true});
+        }
         
     }
 
@@ -124,10 +128,9 @@ export class PokemonSearch extends Component<User, SearchState> {
             <p>
                 User {userName} {numberofPokemons && <span>has {numberofPokemons} pokemons</span>}    
             </p>
-        <input type="text" ref={this.pokemonRef}/>
-        <button onClick={this.onSearchClick} className="my-button">
-            Search
-        </button>
+        <input type="text" ref={this.pokemonRef} className="my-input"/ >
+        <Button variant ="contained" color="primary" onClick={this.onSearchClick}>Search</Button>
+        
         {resultMarkup}
         </div>
 
